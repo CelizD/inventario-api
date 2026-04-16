@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { getCategorias, getCategoriaById, createCategoria } = require("../controllers/categoriaController");
+const { getCategorias, getCategoriaById, createCategoria, updateCategoria, deleteCategoria } = require("../controllers/categoriaController");
 
 /**
  * @swagger
@@ -17,18 +17,7 @@ const { getCategorias, getCategoriaById, createCategoria } = require("../control
  *     tags: [Categorías]
  *     responses:
  *       200:
- *         description: Lista de categorías obtenida correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 ok:
- *                   type: boolean
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Categoria'
+ *         description: Lista de categorías
  */
 router.get("/", getCategorias);
 
@@ -44,19 +33,9 @@ router.get("/", getCategorias);
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID de la categoría
  *     responses:
  *       200:
  *         description: Categoría encontrada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 ok:
- *                   type: boolean
- *                 data:
- *                   $ref: '#/components/schemas/Categoria'
  *       404:
  *         description: Categoría no encontrada
  */
@@ -79,19 +58,74 @@ router.get("/:id", getCategoriaById);
  *             properties:
  *               nombre:
  *                 type: string
- *                 example: Electrónica
+ *                 example: Bebidas
  *               descripcion:
  *                 type: string
- *                 example: Dispositivos y accesorios electrónicos
+ *                 example: Refrescos, aguas y jugos
  *     responses:
  *       201:
- *         description: Categoría creada correctamente
+ *         description: Categoría creada
  *       400:
  *         description: Datos inválidos
  *       409:
  *         description: Ya existe una categoría con ese nombre
  */
 router.post("/", createCategoria);
+
+/**
+ * @swagger
+ * /categorias/{id}:
+ *   put:
+ *     summary: Actualizar una categoría existente
+ *     tags: [Categorías]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: Bebidas y Jugos
+ *               descripcion:
+ *                 type: string
+ *                 example: Descripción actualizada
+ *     responses:
+ *       200:
+ *         description: Categoría actualizada
+ *       404:
+ *         description: Categoría no encontrada
+ *       409:
+ *         description: Ya existe una categoría con ese nombre
+ */
+router.put("/:id", updateCategoria);
+
+/**
+ * @swagger
+ * /categorias/{id}:
+ *   delete:
+ *     summary: Eliminar una categoría
+ *     tags: [Categorías]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Categoría eliminada
+ *       404:
+ *         description: Categoría no encontrada
+ */
+router.delete("/:id", deleteCategoria);
 
 /**
  * @swagger
@@ -105,10 +139,10 @@ router.post("/", createCategoria);
  *           example: 1
  *         nombre:
  *           type: string
- *           example: Electrónica
+ *           example: Bebidas
  *         descripcion:
  *           type: string
- *           example: Dispositivos y accesorios electrónicos
+ *           example: Refrescos, aguas y jugos
  *         createdAt:
  *           type: string
  *           format: date-time
